@@ -1,0 +1,17 @@
+export const carMarker = require('./carMarker.png');
+export const endMarker = require('./endMarker.png');
+export const forgotpass = require('./forgotpass.png');
+export const history = require('./history.png');
+export const home = require('./home.png');
+export const icon = require('./icon.png');
+export const login = require('./login.png');
+export const logout = require('./logout.png');
+export const password = require('./password.png');
+export const payment = require('./payment.png');
+export const pin = require('./pin.png');
+export const shared = require('./shared.jpg');
+export const single = require('./single.jpg');
+export const signup = require('./signup.png');
+export const startMarker = require('./startMarker.png');
+export const trosky_logo = require('./trosky_logo.png');
+export const trosky_logo1 = require('./trosky_logo1.png');
