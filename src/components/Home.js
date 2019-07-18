@@ -15,7 +15,6 @@ import {
 } from "react-native";
 import Spinner from "react-native-loading-spinner-overlay";
 import Icon from "react-native-vector-icons/FontAwesome";
-import RNGooglePlaces from "react-native-google-places";
 import MapView, {
   MAP_TYPES,
   ProviderPropType,
@@ -154,13 +153,12 @@ class Home extends React.Component {
   handleSelectedAddress = async(selected)=>{
       let search = selected.description;
       let placeID = selected.place_id;
-      //https://maps.googleapis.com/maps/api/place/details/json?placeid=ChIJrTLr-GyuEmsRBfy61i59si0&key=YOUR_API_KEY
 
       //set state of selected terms
       if(this.state.toggleModal == "pickUp"){
         this.setState({searchTerm1:search,searchStartTerm:search});
         try{
-          const response = await fetch(`https://maps.googleapis.com/maps/api/place/details/json?placeid=${placeID}&key=AIzaSyDUBFYYKjalX9b9IBiKnivW912dN-zMWvU`)
+          const response = await fetch(`https://maps.googleapis.com/maps/api/place/details/json?placeid=${placeID}&key=API_KEY`)
           const posts = await response.json()
           console.log(posts.result.geometry.location.lat);
           this.setState({
@@ -174,7 +172,7 @@ class Home extends React.Component {
       if(this.state.toggleModal == "dropOff"){
         this.setState({searchTerm2:search,searchEndTerm:search});
         try{
-          const response = await fetch(`https://maps.googleapis.com/maps/api/place/details/json?placeid=${placeID}&key=AIzaSyDUBFYYKjalX9b9IBiKnivW912dN-zMWvU`)
+          const response = await fetch(`https://maps.googleapis.com/maps/api/place/details/json?placeid=${placeID}&key=API_KEY`)
           const posts = await response.json()
           console.log(posts.result.geometry.location.lat);
           this.setState({
@@ -191,14 +189,6 @@ class Home extends React.Component {
       if(this.state.searchStartTerm != "" && this.state.searchEndTerm != ""){
         this.setState({pickUp:null,isVisible:true,navigation:true});
 
-        // this.setState({
-        //   selectedAddress:{
-        //     selectedPickup:{latitude:'',longitude:''},
-        //     selectedDropOff:{latitude:'',longitude:''}
-        //   }
-
-        // })
-        //console.log("ready to fly");
       }
   }
 
@@ -207,26 +197,14 @@ class Home extends React.Component {
   }
 
   getAddressPredictions=async(sTerm)=>{
-   // https://maps.googleapis.com/maps/api/place/autocomplete/json?input=Vict&types=(cities)&language=pt_BR&key=YOUR_API_KEY
    try{
-   const response = await fetch(`https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${sTerm}&components=country%3AGH&key=AIzaSyDUBFYYKjalX9b9IBiKnivW912dN-zMWvU`)
+   const response = await fetch(`https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${sTerm}&components=country%3AGH&key=API_KEY`)
    const posts = await response.json()
    this.setState({searchResult:posts.predictions})
    }catch (e) {
     console.log(e);
   }
-  //   let userInput = sTerm;
-	//  await	RNGooglePlaces.getAutocompletePredictions(userInput,
-	// 		{
-	// 			country:"GH"
-	// 		}
-	// 	)
-	// 	.then((results)=>{
-  //       //get result into  an array and set searchResult state
-  //       this.setState({searchResult:results});
-  //       console.log(results);
-  //   })
-	// 	.catch((error)=> console.log(error.message));
+  
   }
 
   componentDidMount() {
@@ -337,185 +315,7 @@ class Home extends React.Component {
  
  
  
-  //////////////////////////////////////MODAL CONTENT////////////////////////////////////
-  // renderModalContent = () => (
-  //   <View style={styles.content}>
-  //     <Text style={styles.contentTitle}>You are about to book a Ride</Text>
-  //     <Text style={styles.contentTitle}>
-  //       Choosen Destination: {this.state.destination}
-  //     </Text>
-  //     <View
-  //       style={{
-  //         flex: 1,
-  //         flexDirection: "column",
-  //         justifyContent: "center"
-  //       }}
-  //     >
-  //       <CheckBox
-  //         left
-  //         title="Single Ride"
-  //         checked={this.state.single}
-  //         onPress={() => {
-  //           this.setState({ single: !this.state.single,shared: false,booksingle: false,bookshared: false });
-  //           //////////////calculate the fare////////////////////
-  //           this.setState({spinner:true});
-  //           let distance = this.calculateDistance();
-  //           let fareC = calculateFare("single", 0, distance);
-  //           this.setState({ fare: fareC,ride:'single' });
-  //           this.setState({spinner:false});
-  //         }}
-  //       />
-  //       <CheckBox
-  //         left
-  //         title="Shared Ride"
-  //         checked={this.state.shared}
-  //         onPress={() => {
-  //           this.setState({ single: false,shared: !this.state.shared,booksingle: false,bookshared: false });
-  //           //////////////calculate the fare////////////////////
-  //           this.setState({spinner:true});
-  //           let distance = this.calculateDistance();
-  //           let fareC = calculateFare("shared", 0,distance);
-  //           this.setState({ fare: fareC,ride:'shared' });
-  //           this.setState({spinner:false});
-  //         }}
-  //       />
-  //       <CheckBox
-  //         left
-  //         title="Book Single"
-  //         checked={this.state.booksingle}
-  //         onPress={() => {
-  //           this.setState({ single: false,shared: false,booksingle: true,bookshared: false });
-  //           //////////////calculate the fare////////////////////
-  //           this.setState({spinner:true});
-  //           let distance = this.calculateDistance();
-  //           let fareC = calculateFare("booksingle", 0, distance);
-  //           this.setState({ fare: fareC,booksingle:'booksingle' });
-  //           this.setState({spinner:false});
-  //         }}
-  //       />
-  //       <CheckBox
-  //         left
-  //         title="Book Shared"
-  //         checked={this.state.bookshared}
-  //         onPress={() => {
-  //           this.setState({ single: false,shared: false,booksingle: false,bookshared: true });
-  //           //////////////calculate the fare////////////////////
-  //           this.setState({spinner:true});
-  //            let distance = this.calculateDistance();
-  //           let fareC = calculateFare("bookshared", 0, this.calculateDistance);
-  //           this.setState({ fare: fareC,bookshared:'bookshared' });
-  //           this.setState({spinner:false});
-  //         }}
-  //       />
-
-  //       <Text>Your fair is: </Text>
-  //       <Text style={{ fontSize: 18, color: "#fff", fontWeight: "bold" }}>
-  //        GHS {this.state.fare}
-  //       </Text>
-  //     </View>
-  //     <View
-  //       style={{
-  //         flexDirection: "row",
-  //         paddingHorizontal: 10,
-  //         justifyContent: "space-between",
-  //         alignItems: "space-between"
-  //       }}
-  //     >
-  //       <Button
-  //         onPress={() => this.setState({ isVisible: false })}
-  //         title="Close"
-  //       />
-  //       <Button
-  //         onPress={() => {
-  //           this.setState({ spinner: true });
-  //           let id = this.guidGenerator();
-  //           this.setState({ requestID: id });
-  //           //Alert.alert("Information", "Looking for the nearest driver")
-
-           
-  //           /////////////contact the driver////////////////////
-  //           //send a request to the nearest driver
-  //           //if he respond then draw polyline
-  //           //else display a message to passenger.
-
-  //           ////GET NEAREST DRIVER//////////////////////////////
-  //           let mylat = this.state.region.latitude;
-  //           let mylon = this.state.region.longitude;
-  //           let deslat = this.state.destlatitude;
-  //           let destlon = this.state.destlongitude;
-            
-  //           const arrayToObject = (array) =>
-  //             array.reduce((obj, item) => {
-  //               obj[item['license']] = item
-  //               return obj
-  //             }, {})
-
-  //            //console.log( arrayToObject(this.state.drivers));
-    
-  //           let nearest = geolib.findNearest(
-  //             { latitude: mylat, longitude: mylon },
-  //             arrayToObject(this.state.drivers),
-  //             1
-  //           );
-          
-  //           ///////////SENDING THE REQUEST TO THE NEAREST DRIVER//////////////////
-
-  //           let uid = firebase.auth().currentUser.uid;
-
-  //           var tempDate = new Date();
-  //           var dateCurrent = tempDate.getFullYear() + '-' + (tempDate.getMonth()+1) + '-' + tempDate.getDate() +' '+ tempDate.getHours()+':'+ tempDate.getMinutes()+':'+ tempDate.getSeconds();
-           
-  //           //console.log(dateCurrent);
-  //           firebase
-  //             .database()
-  //             .ref("trips/" + id)
-  //             .set({
-  //               coordinates: [mylat,mylon,deslat,destlon],
-  //               carID:'0',
-  //               customer: uid,
-  //               triptype: this.state.ride,
-  //               date: dateCurrent,
-  //               driverId: nearest.key,
-  //               status: "Pending",
-  //               distance:this.calculateDistance(),
-  //               duration: 0,
-  //               cost:0.0,
-  //             })
-  //             .then(data => {
-  //               //success
-            
-  //             })
-  //             .catch(error => {
-  //               console.log("error", error);
-  //             });
-  //           ////////////////END OF BOOKING//////////////////////
-  //           firebase.database().ref('trips/'+id+'/status').on("value",snapshot=>{
-  //             if(snapshot.val()=="start"){
-  //               //var tempDate = new Date();
-  //               var time = tempDate.getFullYear() + '-' + (tempDate.getMonth()+1) + '-' + tempDate.getDate() +' '+ tempDate.getHours()+':'+ tempDate.getMinutes()+':'+ tempDate.getSeconds();
-  //               timeS = "Journey Started @: "+time;
-  //               this.setState({journeyStatus:timeS,navigation:true})
-
-  //             }else if(snapshot.val()=="completed"){
-  //               /////////////get final fare from firebase
-  //               firebase.database().ref('trips/'+id+'/cost').once("value",snapshot=>{
-  //                 let finalfare = "GHS"+" "+snapshot.val();
-  //                 this.setState({finalFare:finalfare});
-  //               });
-  //             //this.setState({finalFare:snapshot.val()})
-  //             }else{
-  //               this.setState({journeyStatus:snapshot.val()})
-  //             }
-  //          });
-  //           this.setState({ spinner: false,isVisible: false });
-            
-  //         }}
-  //         color="#2E8301"
-  //         title="Book"
-  //       />
-  //     </View>
-  //   </View>
-  // );
+ 
   //////////////////////////////////////END OF CONTENT MODAL///////////////////////////
  sendRequest(){
   let id = this.guidGenerator();
@@ -583,24 +383,7 @@ let nearest = geolib.findNearest(
       console.log("error", error);
     });
 
-  //   firebase.database().ref('trips/'+id+'/status').on("value",snapshot=>{
-  //     if(snapshot.val()=="start"){
-  //       //var tempDate = new Date();
-  //       var time = tempDate.getFullYear() + '-' + (tempDate.getMonth()+1) + '-' + tempDate.getDate() +' '+ tempDate.getHours()+':'+ tempDate.getMinutes()+':'+ tempDate.getSeconds();
-  //       timeS = "Journey Started @: "+time;
-  //       this.setState({journeyStatus:timeS,navigation:true})
-
-  //     }else if(snapshot.val()=="completed"){
-  //       /////////////get final fare from firebase
-  //       firebase.database().ref('trips/'+id+'/cost').once("value",snapshot=>{
-  //         let finalfare = "GHS"+" "+snapshot.val();
-  //         this.setState({finalFare:finalfare});
-  //       });
-  //     //this.setState({finalFare:snapshot.val()})
-  //     }else if(snapshot.val() == "Accepted"){
-  //       this.setState({journeyStatus:snapshot.val()})
-  //     }
-  //  });
+  
   
  }
 
@@ -811,41 +594,13 @@ let nearest = geolib.findNearest(
                       borderColor:'rgba(0,0,0,0.2)'
                     }}
                     onPress={()=>{
-                      // this.setState({fare:"calculating...",ride:"shared"});
-                      // let time = this.state.estimatedTime;
-                      // let distance = this.state.distance
-                      // let newfare = await calculateFare("shared",time,distance);
-                      // newfare = Math.round(newfare*100)/100;
-                      // this.setState({fare:newfare});
+                    
                       this.setState({isModalVisible:true});
                     }}
                   >
                   <Image style={{width:35,height:35}} source={shared} />
                   </TouchableOpacity>
-                  {/* <TouchableOpacity
-                    style={{
-                      backgroundColor:'#fff',
-                      borderRadius:100,
-                      width:50,
-                      height:50,
-                      justifyContent:'center',
-                      alignItems:'center',
-                      alignSelf:'flex-end',
-                      borderWidth:1,
-                      borderColor:'rgba(0,0,0,0.2)'
-                    }} 
-                    onPress={async()=>{
-                      this.setState({fare:"calculating...",ride:"book"});
-                      let time = this.state.estimatedTime;
-                      let distance = this.state.distance
-                      let newfare = await calculateFare("book",time,distance);
-                      newfare = Math.round(newfare*100)/100;
-                      this.setState({fare:newfare});
-                    }}
-                  >
-                  <Image style={{width:25,height:25}} source={require('../../assets/carMarker.png')} />
-                  <Text>Book</Text>
-                  </TouchableOpacity> */}
+                 
               </View>
               
               <View style={{flexDirection:'row',flex:1,justifyContent:'space-between',paddingHorizontal:10}}>
@@ -882,69 +637,7 @@ let nearest = geolib.findNearest(
           
           } 
 
-          {/* Driver details modal */}
-
-           {/* { (this.state.journeyStatus == "Accepted") &&
-          <View style={styles.bookRideWrapper} >
-              <View style={{flexDirection:'row',margin:20,justifyContent:'center'}}>
-                  <Text style={{color:'#fff'}}>Driver: {this.state.selectedDriver.username}</Text>
-                  <Text style={{color:'#fff'}}>Car: {this.state.selectedDriver.carID}</Text>
-              </View>
-              
-              <View style={{flexDirection:'row',flex:1,justifyContent:'space-between',paddingHorizontal:10}}>
-                    <View style={{flexDirection:'column',justifyContent:'space-between'}}>
-                        <Text style={{color:'#fff'}}>Start: {this.state.searchTerm1}</Text>
-                        <Text style={{color:'#fff'}}>End: {this.state.searchTerm2}</Text>
-                    </View>
-                   
-
-              </View>
-              <View style={{flexDirection:'row',flex:1,justifyContent:'space-between',marginHorizontal:10,}}>
-                   <TouchableOpacity onPress={()=>this.sendRequest()} style={{width:'40%',justifyContent:'center',bottom:7,backgroundColor:'#ff0',top:7}}>
-                     <Text style={{alignSelf:'center'}}>Open Navigation</Text>
-                   </TouchableOpacity>
-                   <TouchableOpacity style={{width:'40%',justifyContent:'center',bottom:7,backgroundColor:'#f00',top:7}}
-                   onPress={()=>{
-                     this.setState({
-                       distance:0,
-                       fare:0,
-                       estimatedTime:0,
-                       isVisible:false,
-                       searchTerm1:"",
-                       searchTerm2:""
-                      })
-                   }}>
-                     <Text style={{alignSelf:'center'}}>Cancel</Text>
-                   </TouchableOpacity>
-              </View>
-          </View>  */}
-          
-          
-  
-          {/* End of driver details modal */}
-  
-        
-          {/* {this.state.isVisible==false ?(
-          <TouchableOpacity
-                    style={{
-                      backgroundColor:'#00f',
-                      borderRadius:100,
-                      width:70,
-                      height:70,
-                      position:'absolute',
-                      justifyContent:'center',
-                      alignItems:'center',
-                      bottom:10,
-                      right:10,
-                      alignSelf:'flex-end',
-                      borderWidth:2,
-                      borderColor:'rgba(0,0,0,0.5)'
-                    }} 
-                  onPress={()=>{this.props.navigation.navigate("ProfileView")}}
-                  >
-                  <Text>Menu</Text>
-          </TouchableOpacity>):null} */}
-
+         
         <Modal isVisible={this.state.isModalVisible}
          animationIn="slideInLeft"
          animationOut="zoomOutUp">
