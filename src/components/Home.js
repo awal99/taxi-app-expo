@@ -467,7 +467,7 @@ let nearest = geolib.findNearest(
             <MapViewDirections
               origin={{latitude:mylat,longitude:mylon}}
               destination={{latitude:deslat,longitude:destlon}}
-              apikey={"AIzaSyDUBFYYKjalX9b9IBiKnivW912dN-zMWvU"}
+              apikey={"API_KEY"}
               strokeWidth={4}
               strokeColor="hotpink"
               onReady={result => {
